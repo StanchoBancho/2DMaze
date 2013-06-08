@@ -1,5 +1,6 @@
 import pygame
 import random
+from time import time
 
 class World:
 
@@ -31,28 +32,28 @@ class Maze:
             if self.board[i - 2][j] == -1:
                 self.board[i - 2][j] = 7
                 possible_moves.append((i - 2, j))
-            elif self.board[i - 2][j] == 1:
+            elif self.board[i - 2][j] == 0:
                 links.append((i - 1, j))
                 
         if j + 3 <= self.height:
             if self.board[i][j + 2] == -1:
                 self.board[i][j + 2] = 7
                 possible_moves.append((i, j + 2))
-            elif self.board[i][j + 2] == 1:
+            elif self.board[i][j + 2] == 0:
                 links.append((i , j + 1))
 
         if j >= 3:
             if self.board[i][j - 2] == -1:
                 self.board[i][j - 2] = 7
                 possible_moves.append((i , j - 2))
-            elif self.board[i][j - 2] == 1:
+            elif self.board[i][j - 2] == 0:
                 links.append((i , j - 1))
 
         if i + 3 <= self.width:
             if self.board[i + 2][j] == -1:
                 self.board[i + 2][j] = 7
                 possible_moves.append((i + 2, j));
-            elif self.board[i + 2][j] == 1:
+            elif self.board[i + 2][j] == 0:
                 links.append((i + 1 , j))
 
         if len(links) > 0:
@@ -74,11 +75,26 @@ class Maze:
                     self.board[i][j] = -1
                 else:
                     self.board[i][j] = 1
+
+
+#        for i in range(1, self.width - 1):
+#            for j in range(1, self.height -1):
+#                if i%2 == 1 or j % 2 == 1:
+#                    self.board[i][j] = 1
+#                if (i + j) % 2 == 1:
+#                    self.board[i][j] = 0
+#        self.board[0][1] = 0
+#
+#        for i in range(1, self.width, 2):
+#            for j in range(1, self.height, 2):
+#                self.board[i][j] = -1
+               
         #make the puzzle
-        possible_moves = [(2, 2)]
+        possible_moves = [(1, 1)]
+        random.seed()
         while len(possible_moves) > 0:   
             chosen_square = possible_moves[random.randrange(0, len(possible_moves))]
-            self.board[chosen_square[0]][chosen_square[1]] = 1
+            self.board[chosen_square[0]][chosen_square[1]] = 0
             possible_moves.remove(chosen_square)
             self.link(chosen_square, possible_moves)
         
@@ -87,4 +103,6 @@ class Maze:
         for i in range(self.width):
             for j in  range(self.height):
                 if self.board[i][j] == 1:
-                    pygame.draw.rect(screen, (0, 0, 0), (2 + j * 5, 2 + i * 5, 5, 5))
+                    pygame.draw.rect(screen, (0, 0, 0), ( j * 5,  i * 5, 5, 5))
+                if self.board[i][j] == -1:
+                    pygame.draw.rect(screen, (0, 255, 0), ( j * 5, i * 5, 5, 5))

@@ -42,7 +42,6 @@ class Game:
 
             #Draw everything
             self.world.draw(self.screen)
-            pygame.draw.rect(self.screen, self.green, (50,60,50,50))
 
             pygame.display.flip()
             # Limit to 20 frames per second
