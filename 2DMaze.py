@@ -1,6 +1,7 @@
 import pygame
 from pygame import event
 import World
+import GameMenu
 
 class Game:
 
@@ -11,12 +12,15 @@ class Game:
     green = (0, 255, 0)
     red = ( 255, 0, 0)
     running = True
-
+    should_show_menu = True
+    
     def __init__(self, resolution):
         pygame.init()
         self.screen = pygame.display.set_mode(resolution)
         pygame.display.set_caption("2DMaze Game")
 
+        self.menu = GameMenu.GameMenu(self.screen, resolution)
+        
         world_height = int(resolution[0] / 5) - 1 
         world_widht = int(resolution[1] / 5) - 1
         self.world = World.World((world_height, world_widht))
@@ -34,25 +38,37 @@ class Game:
                     pygame.quit()
                     return                    
                 if event.type == pygame.KEYDOWN:
+                    if self.should_show_menu:
+                        pass 
+                    else:
+                        if event.key == pygame.K_LEFT:
+                           self.player_one.move(World.Player.LEFT)
+                        if event.key == pygame.K_RIGHT:
+                           self.player_one.move(World.Player.RIGHT)
+                        if event.key == pygame.K_UP:
+                           self.player_one.move(World.Player.DOWN)
+                        if event.key == pygame.K_DOWN:
+                           self.player_one.move(World.Player.UP)
 
-                     if event.key == pygame.K_LEFT:
-                        self.player_one.move(World.Player.LEFT)
-                     if event.key == pygame.K_RIGHT:
-                        self.player_one.move(World.Player.RIGHT)
-                     if event.key == pygame.K_UP:
-                        self.player_one.move(World.Player.DOWN)
-                     if event.key == pygame.K_DOWN:
-                        self.player_one.move(World.Player.UP)
-                        
-
+                if self.should_show_menu:                                        
+                    self.menu.handle_event(event)
             #Run calculations to determine where objects move,
             #what happens when objects colli6de, etc.
+
+            
+                
+            
 
             #Clear the screen
             self.screen.fill(self.white)
 
             #Draw everything
-            self.world.draw(self.screen)
+            if self.should_show_menu:
+                self.menu.draw()
+                if self.menu.state == GameMenu.GameMenu.SINGLE_PLAYER:
+                    self.should_show_menu = False
+            else:
+                self.world.draw(self.screen)
 
             pygame.display.flip()
             # Limit to 20 frames per second
