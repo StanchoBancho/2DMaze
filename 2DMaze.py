@@ -18,15 +18,28 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode(resolution)
         pygame.display.set_caption("2DMaze Game")
-
         self.menu = GameMenu.GameMenu(self.screen, resolution)
-        
         world_height = int(resolution[0] / 5) - 1 
         world_widht = int(resolution[1] / 5) - 1
         self.world = World.World((world_height, world_widht))
+
+    def init_single_player_game(self):
         self.player_one = World.Player(self.world, (0, 1), "Stancho")
         self.world.add_player(self.player_one)
 
+    def init_multy_player_game(self):
+        self.player_one = World.Player(self.world, (0, 1), "Stancho")
+        self.player_two = World.Player(self.world, (0, 1), "Dobby")
+        self.world.add_player(self.player_one)
+        self.world.add_player(self.player_two)
+
+    def init_player_vs_mac_game(self):
+        self.player_one = World.Player(self.world, (0, 1), "Stancho")
+        self.player_two = World.Player(self.world, (0, 1), "PC")
+        self.world.add_player(self.player_one)
+        self.world.add_player(self.player_two)
+
+        
     def main(self):
         clock = pygame.time.Clock()
         self.screen.fill(self.white)
@@ -67,6 +80,7 @@ class Game:
                 self.menu.draw()
                 if self.menu.state == GameMenu.GameMenu.SINGLE_PLAYER:
                     self.should_show_menu = False
+                    self.init_single_player_game()
             else:
                 self.world.draw(self.screen)
 
