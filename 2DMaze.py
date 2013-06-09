@@ -1,4 +1,5 @@
 import pygame
+from pygame import event
 import World
 
 class Game:
@@ -19,7 +20,8 @@ class Game:
         world_height = int(resolution[0] / 5) - 1 
         world_widht = int(resolution[1] / 5) - 1
         self.world = World.World((world_height, world_widht))
-    
+        self.player_one = World.Player(self.world, (0, 1), "Stancho")
+        self.world.add_player(self.player_one)
 
     def main(self):
         clock = pygame.time.Clock()
@@ -32,10 +34,19 @@ class Game:
                     pygame.quit()
                     return                    
                 if event.type == pygame.KEYDOWN:
-                    print("User pressed a key.")
+
+                     if event.key == pygame.K_LEFT:
+                        self.player_one.move(World.Player.LEFT)
+                     if event.key == pygame.K_RIGHT:
+                        self.player_one.move(World.Player.RIGHT)
+                     if event.key == pygame.K_UP:
+                        self.player_one.move(World.Player.DOWN)
+                     if event.key == pygame.K_DOWN:
+                        self.player_one.move(World.Player.UP)
+                        
 
             #Run calculations to determine where objects move,
-            #what happens when objects collide, etc.
+            #what happens when objects colli6de, etc.
 
             #Clear the screen
             self.screen.fill(self.white)
