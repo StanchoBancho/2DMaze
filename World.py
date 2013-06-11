@@ -12,16 +12,20 @@ class World:
 
     def add_player(self, player):
         self.players.append(player)
-        self.maze.board[player.position[0]][player.position[1]] = 2 + len(self.players)
-        player.pid = 2 + len(self.players)
+        self.maze.board[player.position[0]][player.position[1]] = 1 + len(self.players)
+        player.pid = 1 + len(self.players)
         
     def move_player_to_position(self, player, position):
-        is_position_in_maze_widht = position[0] > 0 and position[0] < self.maze.size[0]
-        is_position_in_maze_height = position[0] > 0 and position[1] < self.maze.size[1] 
-        if not is_position_in_maze_widht or not is_position_in_maze_height:
+        #to fix that
+        is_position_in_maze_widht = position[0] > 0 and position[0] < self.maze.size[1]
+        is_position_in_maze_height = position[1] > 0 and position[1] < self.maze.size[0] 
+#        print(position[0], "<", self.maze.size[0])
+#        print(position[1], "<", self.maze.size[1])
+        if not (is_position_in_maze_widht and is_position_in_maze_height):
             return False
         position_value = self.maze.board[position[0]][position[1]]
         is_position_free = position_value == 0
+
         if is_position_free:
             self.maze.board[player.position[0]][player.position[1]] = 0
             self.maze.board[position[0]][position[1]] = player.pid
@@ -114,9 +118,11 @@ class Maze:
                 if self.board[i][j] == 1:
                     pygame.draw.rect(screen, (0, 0, 0), ( j * 5,  i * 5, 5, 5))
                 if self.board[i][j] == 2:
-                    pygame.draw.rect(screen, (255, 0, 255), ( j * 5, i * 5, 5, 5))
-                if self.board[i][j] == 3:
                     pygame.draw.rect(screen, (255, 0, 0), ( j * 5, i * 5, 5, 5))
+                if self.board[i][j] == 3:
+                    pygame.draw.rect(screen, (0, 255, 0), ( j * 5, i * 5, 5, 5))
+                if self.board[i][j] == -1:
+                    pygame.draw.rect(screen, (0, 0, 0), ( j * 5, i * 5, 5, 5))                
 
 class Player:
     LEFT = (0, -1)
@@ -133,3 +139,10 @@ class Player:
     def move(self, direction):
         new_position = (self.position[0] + direction[0], self.position[1] + direction[1])
         self.world.move_player_to_position(self, new_position)
+        
+class Computer(Player):
+
+    def __init__(self, world, position, name):
+        super.__init(world, position, name)
+
+    
