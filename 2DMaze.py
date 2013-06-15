@@ -3,7 +3,7 @@ from pygame.locals import *
 from pygame import event
 import World
 import GameMenu
-
+import Drawer
 class Game:
 
 
@@ -24,11 +24,13 @@ class Game:
         self.screen = pygame.display.set_mode(resolution)
         pygame.display.set_caption("2DMaze Game")
         self.menu = GameMenu.GameMenu(self.screen, resolution)
-        self.world_height = int(resolution[0] / 5) - 1 
-        self.world_widht = int(resolution[1] / 5) - 1
+        self.square_size = 10
+        self.world_height = int(resolution[0] / self.square_size) - 1 
+        self.world_widht = int(resolution[1] / self.square_size) - 1
         print(self.world_height, self.world_widht)
         self.world = World.World((self.world_height, self.world_widht))
-
+        self.drawer = Drawer.Drawer(self.world, self.screen)
+        
     def init_single_player_game(self):
         self.player_one = World.Player(self.world, (0, 1), "Stancho")
         self.world.add_player(self.player_one)
@@ -41,12 +43,17 @@ class Game:
         player_two_coords = (0, self.world_height - 2)
         self.player_two = World.Player(self.world, player_two_coords, "Dobby")
         self.world.add_player(self.player_two)
+        tresure_coords = (self.world_widht - 1, self.world_height/2)
+        self.world.treasure = World.Treasure(self.world, tresure_coords)
+
 
     def init_player_vs_mac_game(self):
         self.player_one = World.Player(self.world, (0, 1), "Stancho")
         self.player_two = World.Player(self.world, (0, 1), "PC")
         self.world.add_player(self.player_one)
         self.world.add_player(self.player_two)
+        tresure_coords = (self.world_width - 1, self.world_height/2)
+        self.world.treasure = World.Treasure(self.world, tresure_coords)
 
     def check_menu_state(self):
         if self.menu.state == GameMenu.GameMenu.SINGLE_PLAYER:
@@ -113,7 +120,7 @@ class Game:
             if self.should_show_menu or prev_should_show_menu:
                 self.menu.draw()
             else:
-                self.world.draw(self.screen)
+                self.drawer.draw()
 
             pygame.display.flip()
             # Limit to 20 frames per second

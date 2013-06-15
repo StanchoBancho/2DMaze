@@ -4,7 +4,8 @@ import random
 from time import time
 
 class World:
-
+    treasure = None
+    is_treasure_reached_once = False
     def __init__(self, size):
         self.maze = Maze(size)
         self.maze.make_random_puzzle()
@@ -14,7 +15,16 @@ class World:
         self.players.append(player)
         self.maze.board[player.position[0]][player.position[1]] = 1 + len(self.players)
         player.pid = 1 + len(self.players)
-        
+
+    def is_treasure_reached(self):
+        if self.is_treasure_reached_once:
+            return True
+        for player in self.players:
+            if player.position == self.treasure.position:
+                self.is_treasure_reached_once = True
+                return True
+        return False
+           
     def move_player_to_position(self, player, position):
         #to fix that
         is_position_in_maze_widht = position[0] > 0 and position[0] < self.maze.size[1]
@@ -33,9 +43,6 @@ class World:
             return True
         return False
         
-    def draw(self, screen):
-        self.maze.draw(screen)              
-
 class Maze:
 
     def __init__(self, size):
@@ -49,7 +56,7 @@ class Maze:
         #3  - second player
         self.board = [[0 for j in range(self.height)] for i in range(self.width)]
         self.possible_moves = []
-
+        
     def link(self, chosen_square):
         i = chosen_square[0]
         j = chosen_square[1]
@@ -110,19 +117,7 @@ class Maze:
             self.board[chosen_square[0]][chosen_square[1]] = 0
             self.possible_moves.remove(chosen_square)
             self.link(chosen_square)
-        
-        
-    def draw(self, screen):
-        for i in range(self.width):
-            for j in  range(self.height):
-                if self.board[i][j] == 1:
-                    pygame.draw.rect(screen, (0, 0, 0), ( j * 5,  i * 5, 5, 5))
-                if self.board[i][j] == 2:
-                    pygame.draw.rect(screen, (255, 0, 0), ( j * 5, i * 5, 5, 5))
-                if self.board[i][j] == 3:
-                    pygame.draw.rect(screen, (0, 255, 0), ( j * 5, i * 5, 5, 5))
-                if self.board[i][j] == -1:
-                    pygame.draw.rect(screen, (0, 0, 0), ( j * 5, i * 5, 5, 5))                
+
 
 class Player:
     LEFT = (0, -1)
@@ -139,6 +134,11 @@ class Player:
     def move(self, direction):
         new_position = (self.position[0] + direction[0], self.position[1] + direction[1])
         self.world.move_player_to_position(self, new_position)
+
+class Treasure:
+    def __init__(self, world, position):
+        self.world = world
+        self.position = position
         
 class Computer(Player):
 
