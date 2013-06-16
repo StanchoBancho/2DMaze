@@ -10,7 +10,8 @@ class Controller:
     GAME_MENU_SCREEN = 0
     PLAYING_GAME = 1
     GAME_OVER_SCREEN = 2
-
+    SHOULD_QUIT = 3
+    
     def __init__(self, resolution, screen):
         self.resolution = resolution
         self.screen = screen
@@ -19,7 +20,10 @@ class Controller:
         self.drawer = Drawer(screen = self.screen)
 
     def handle_events(self):
-        #handle the events
+        if self.game_state == self.SHOULD_QUIT:
+            print("User pressed quit.")
+            pygame.quit()
+            return True   
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 print("User asked to quit.")
@@ -27,10 +31,11 @@ class Controller:
                 return True                    
             if self.game_state == self.GAME_MENU_SCREEN:                                        
                 self.menu.handle_event(event)
+            if self.game_state == self.GAME_OVER_SCREEN:
+                self.game_over_menu.handle_event(event)
             if event.type == KEYDOWN:
                 if pygame.key.get_pressed()[K_RETURN]:
-                    pass
-                    
+                    pass                   
         keys = pygame.key.get_pressed()
         if self.game_state == self.GAME_MENU_SCREEN:
             pass 
@@ -59,21 +64,25 @@ class Controller:
         if self.game_state == self.GAME_MENU_SCREEN:
             self.check_menu_state()
         elif self.game_state == self.PLAYING_GAME:
-            self.check_game_state()
+            self.check_world_state()
         elif self.game_state == self.GAME_OVER_SCREEN:
-            pass
+            self.check_geme_over_menu_state()
 
 #-check menu status and init a new game if needed
     def check_menu_state(self):
         if self.menu.state == GameMenu.SINGLE_PLAYER:
             self.game_state = self.PLAYING_GAME
             self.init_single_player_game()
+            self.menu.state = GameMenu.NO_MODE_CHOSED
         elif self.menu.state == GameMenu.MULTY_PLAYER:
             self.game_state = self.PLAYING_GAME
             self.init_multy_player_game()
+            self.menu.state = GameMenu.NO_MODE_CHOSED
         elif self.menu.state == GameMenu.PLAYER_VS_MAC:
             self.game_state = self.PLAYING_GAME
             self.init_player_vs_mac_game()
+            self.menu.state = GameMenu.NO_MODE_CHOSED
+        
 
     def init_new_world(self):
         world_height = int(self.resolution[0] / Drawer.SQUARE_SIZE) - 1 
@@ -95,7 +104,8 @@ class Controller:
         player_two_coords = (0, self.world.height - 2)
         self.player_two = Player(self.world, player_two_coords, "Dobby")
         self.world.add_player(self.player_two)
-        tresure_coords = (self.world.width - 1, int(self.world.height/2))
+#        tresure_coords = (self.world.width - 1, int(self.world.height/2))
+        tresure_coords = (1, 2)
         self.world.add_treasure(Treasure(self.world, tresure_coords))
 
     def init_player_vs_mac_game(self):
@@ -108,17 +118,23 @@ class Controller:
         self.world.add_treasure(Treasure(self.world, tresure_coords))
 
 #-check game status and show game over screen if needed
-    def check_game_state(self):
-        if self.world.is_treasure_reached():
-            self.game_state == self.GAME_OVER_SCREEN                       
-
+    def check_world_state(self):
+        is_treasure_reached = self.world.is_treasure_reached()
+        if is_treasure_reached:
+            self.game_state = self.GAME_OVER_SCREEN                       
+            self.init_game_over_screen()
+            
     def init_game_over_screen(self):
         winner_name = self.world.winner.name
         self.game_over_menu = GameOverMenu(self.resolution, winner_name)
 
 #-check game over menu status and start new game of quit
-    
-       
+    def check_geme_over_menu_state(self):
+        if self.game_over_menu.state == GameOverMenu.NEW_GAME:
+            self.game_state = self.GAME_MENU_SCREEN
+        elif self.game_over_menu.state == GameOverMenu.QUIT:
+            self.game_state = self.SHOULD_QUIT
+             
 #Ask the drawer to draw the required part of the game 
 
     def draw(self):
@@ -126,7 +142,7 @@ class Controller:
             self.drawer.draw_game_menu(self.menu)
         elif self.game_state == self.PLAYING_GAME:
             self.drawer.draw_maze(self.world)
-        elif self.game.state == self.GAME_OVER_SCREEN:
+        elif self.game_state == self.GAME_OVER_SCREEN:
             self.drawer.draw_game_over_menu(self.game_over_menu)
            
         

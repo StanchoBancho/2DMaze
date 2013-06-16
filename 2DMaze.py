@@ -1,9 +1,4 @@
 import pygame
-from pygame import event
-import World
-import GameMenu
-import GameOverMenu
-import Drawer
 from Controller import *
 
 class Game:
@@ -18,18 +13,6 @@ class Game:
         self.screen = pygame.display.set_mode(resolution)
         pygame.display.set_caption("2DMaze Game")
         self.controller = Controller(resolution, self.screen)       
-
-#        self.menu = GameMenu.GameMenu(self.screen, resolution)
-#        self.square_size = 10
-#        self.world_height = int(resolution[0] / self.square_size) - 1 
-#        self.world_widht = int(resolution[1] / self.square_size) - 1
-#        print(self.world_height, self.world_widht)
-#        self.world = World.World((self.world_widht, self.world_height))
-#        self.drawer = Drawer.Drawer(self.world, self.menu, self.screen)
-
-    def show_game_over_menu(self):
-        name = self.world
-        self.game_over_menu = GameOverMenu.GameOverMenu(self.resolution)
 
     def main(self):
         clock = pygame.time.Clock()

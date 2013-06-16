@@ -1,6 +1,7 @@
 import pygame
 from World import *
 import GameMenu
+import GameOverMenu
 import pygbutton
 import os, sys
 
@@ -45,12 +46,31 @@ class Drawer:
         for b in game_menu.all_buttons:
             b.draw(self.screen)
         
-
     def draw_game_over_menu(self, game_over_menu):
-        pass
+        r = game_over_menu.resolution
+        game_over_menu_frame = (game_over_menu.origin[0], game_over_menu.origin[1], 256, 256)
+        pygame.draw.rect(self.screen, (232, 232, 232), game_over_menu_frame)
+
+        game_over_font = pygame.font.SysFont("monospace", 44)
+        game_over_label = game_over_font.render("Game Over", 1, (0,0,0))
+        game_over_title_origin = (game_over_menu.origin[0] + 10, game_over_menu.origin[1])
+        self.screen.blit(game_over_label, game_over_title_origin)
+
+        detail_font = pygame.font.SysFont("monospace", 26)
+        detail_text_one = "Congratulations,"
+        detail_label_one = detail_font.render(detail_text_one, 1, (0,0,0))
+        detail_title_origin = (game_over_menu.origin[0] + 2, game_over_menu.origin[1] + 50)
+        self.screen.blit(detail_label_one, detail_title_origin)
+
+        detail_text_two = "{0} you win!".format(game_over_menu.winner_name)
+        detail_label_two = detail_font.render(detail_text_two, 1, (0,0,0))
+        detail_title_two_origin = (game_over_menu.origin[0] + 2, game_over_menu.origin[1] + 80)
+        self.screen.blit(detail_label_two, detail_title_two_origin)
  
 
-        
+        for b in game_over_menu.all_buttons:
+            b.draw(self.screen)
+ 
     def load_image(name, colorkey=None):
         fullname = os.path.join('data', name)
         try:
