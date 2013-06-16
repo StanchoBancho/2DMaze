@@ -6,7 +6,11 @@ from time import time
 class World:
     treasure = None
     is_treasure_reached_once = False
+    winner = None
+    
     def __init__(self, size):
+        self.width = size[0]
+        self.height = size[1]
         self.maze = Maze(size)
         self.maze.make_random_puzzle()
         self.players = []
@@ -16,21 +20,23 @@ class World:
         self.maze.board[player.position[0]][player.position[1]] = 1 + len(self.players)
         player.pid = 1 + len(self.players)
 
+    def add_treasure(self, treasure):
+        self.treasure = treasure
+        self.maze.board[treasure.position[0]][treasure.position[1]] = 0
+
     def is_treasure_reached(self):
         if self.is_treasure_reached_once:
             return True
         for player in self.players:
             if player.position == self.treasure.position:
                 self.is_treasure_reached_once = True
+                self.winner = player
                 return True
         return False
            
     def move_player_to_position(self, player, position):
-        #to fix that
-        is_position_in_maze_widht = position[0] > 0 and position[0] < self.maze.size[1]
-        is_position_in_maze_height = position[1] > 0 and position[1] < self.maze.size[0] 
-#        print(position[0], "<", self.maze.size[0])
-#        print(position[1], "<", self.maze.size[1])
+        is_position_in_maze_widht = position[0] > 0 and position[0] < self.maze.size[0]
+        is_position_in_maze_height = position[1] > 0 and position[1] < self.maze.size[1] 
         if not (is_position_in_maze_widht and is_position_in_maze_height):
             return False
         position_value = self.maze.board[position[0]][position[1]]
@@ -47,8 +53,8 @@ class Maze:
 
     def __init__(self, size):
         self.size = size
-        self.height = size[0]
-        self.width = size[1]
+        self.height = size[1]
+        self.width = size[0]
         #-1 - unknown
         #0  - empty
         #1  - black
