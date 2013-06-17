@@ -5,25 +5,32 @@ from Drawer import *
 from GameMenu import *
 from World import *
 from GameOverMenu import *
+from AIPlayerController import AIPlayerController
 
 class Controller:
     GAME_MENU_SCREEN = 0
     PLAYING_GAME = 1
     GAME_OVER_SCREEN = 2
     SHOULD_QUIT = 3
+
+    GAME_MODE_NONE = -1
+    GAME_MODE_TRAINING = 0
+    GAME_MODE_TWO_PLAYERS = 1
+    GAME_MODE_PLAYER_VS_COMPUTER = 2
     
     def __init__(self, resolution, screen):
         self.resolution = resolution
         self.screen = screen
         self.game_state = self.GAME_MENU_SCREEN
+        self.game_mode = self.GAME_MODE_NONE
         self.menu = GameMenu(self.screen, resolution)
         self.drawer = Drawer(screen = self.screen)
-
+    
     def handle_events(self):
         if self.game_state == self.SHOULD_QUIT:
             print("User pressed quit.")
             pygame.quit()
-            return True   
+            return True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 print("User asked to quit.")
@@ -40,6 +47,7 @@ class Controller:
         if self.game_state == self.GAME_MENU_SCREEN:
             pass 
         if self.game_state == self.PLAYING_GAME:
+            #move the player one
             if keys[K_LEFT]:
                 self.player_one.move(Player.LEFT)
             if keys[K_RIGHT]:
@@ -48,7 +56,8 @@ class Controller:
                 self.player_one.move(Player.DOWN)
             if keys[K_DOWN]:
                 self.player_one.move(Player.UP)
-            if self.player_two:
+            #move the second player
+            if self.game_mode == self.GAME_MODE_TWO_PLAYERS:
                 if keys[K_a]:
                     self.player_two.move(Player.LEFT)
                 if keys[K_d]:
@@ -56,7 +65,10 @@ class Controller:
                 if keys[K_w]:
                     self.player_two.move(Player.DOWN)
                 if keys[K_s]:
-                     self.player_two.move(Player.UP)        
+                     self.player_two.move(Player.UP)
+            #move the computer
+            if self.game_mode == self.GAME_MODE_PLAYER_VS_COMPUTER:
+                self.player_controller.move_player()
         return False
 #Check (and change the game state if needed)
 
@@ -96,6 +108,7 @@ class Controller:
         self.player_two = None
         tresure_coords = (self.world.width - 1, int(self.world.height/2))
         self.world.add_treasure(Treasure(self.world, tresure_coords))
+        self.game_mode = self.GAME_MODE_TRAINING
 
     def init_multy_player_game(self):
         self.init_new_world()
@@ -104,18 +117,25 @@ class Controller:
         player_two_coords = (0, self.world.height - 2)
         self.player_two = Player(self.world, player_two_coords, "Dobby")
         self.world.add_player(self.player_two)
-#        tresure_coords = (self.world.width - 1, int(self.world.height/2))
-        tresure_coords = (1, 2)
+        tresure_coords = (self.world.width - 1, int(self.world.height/2))
+#        tresure_coords = (1, 2)
         self.world.add_treasure(Treasure(self.world, tresure_coords))
+        self.game_mode = self.GAME_MODE_TWO_PLAYERS
 
     def init_player_vs_mac_game(self):
         self.init_new_world()
-        self.player_one = Player(self.world, (0, 1), "Stancho")
-        self.player_two = Player(self.world, (0, 1), "PC")
-        self.world.add_player(self.player_one)
-        self.world.add_player(self.player_two)
+
         tresure_coords = (self.world.width - 2, int(self.world.height / 2))
         self.world.add_treasure(Treasure(self.world, tresure_coords))
+
+        self.player_one = Player(self.world, (0, 1), "Stancho")
+        self.world.add_player(self.player_one)
+
+        self.player_two = Player(self.world, (0, self.world.height - 2), "PC")
+        self.world.add_player(self.player_two)
+        self.player_controller = AIPlayerController(self.world, self.player_two, tresure_coords)
+    
+        self.game_mode = self.GAME_MODE_PLAYER_VS_COMPUTER
 
 #-check game status and show game over screen if needed
     def check_world_state(self):

@@ -33,7 +33,16 @@ class World:
                 self.winner = player
                 return True
         return False
-           
+    
+    def is_position_free(self, position):
+        is_position_in_maze_widht = position[0] > 0 and position[0] < self.maze.size[0]
+        is_position_in_maze_height = position[1] > 0 and position[1] < self.maze.size[1] 
+        if not (is_position_in_maze_widht and is_position_in_maze_height):
+            return False
+        position_value = self.maze.board[position[0]][position[1]]
+        is_position_free = position_value != 1
+        return is_position_free
+
     def move_player_to_position(self, player, position):
         is_position_in_maze_widht = position[0] > 0 and position[0] < self.maze.size[0]
         is_position_in_maze_height = position[1] > 0 and position[1] < self.maze.size[1] 
@@ -130,6 +139,7 @@ class Player:
     RIGHT = (0, 1)
     UP = (1, 0)
     DOWN = (-1, 0)
+    POSIBLE_DIRECTIONS = [LEFT, RIGHT, UP, DOWN]
     
     def __init__(self, world, position, name):
         self.world = world
@@ -141,14 +151,10 @@ class Player:
         new_position = (self.position[0] + direction[0], self.position[1] + direction[1])
         self.world.move_player_to_position(self, new_position)
 
+    def move_to_position(self, new_position):
+        self.world.move_player_to_position(self, new_position)
+        
 class Treasure:
     def __init__(self, world, position):
         self.world = world
         self.position = position
-        
-class Computer(Player):
-
-    def __init__(self, world, position, name):
-        super.__init(world, position, name)
-
-    
