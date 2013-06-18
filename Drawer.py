@@ -26,12 +26,10 @@ class Drawer:
             for j in  range(height):
                 if world_map[i][j] == 1:
                     pygame.draw.rect(self.screen, (0, 0, 0), ( j * s,  i * s, s, s))
-                if world_map[i][j] == 2:
+                elif world_map[i][j] == 2:
                     pygame.draw.rect(self.screen, (255, 0, 0), ( j * s, i * s, s, s))
-                if world_map[i][j] == 3:
+                elif world_map[i][j] == 3:
                     pygame.draw.rect(self.screen, (0, 255, 0), ( j * s, i * s, s, s))
-                if world_map[i][j] == -1:
-                    pygame.draw.rect(self.screen, (0, 0, 0), ( j * s, i * s, s, s))          
         tr_pos = world.treasure.position
         pygame.draw.rect(self.screen, (0, 0, 255), (tr_pos[1]*s, tr_pos[0]*s, s, s))
 
