@@ -6,7 +6,7 @@ class AIPlayerController:
         self.world = world
         self.player = player
         self.final_pos = final_pos
-        self.moves = [self.player.position]
+        self.moves = []
         self.used_positions = []
                 
     def heuristic_cost(self, start, goal):
@@ -32,22 +32,22 @@ class AIPlayerController:
             else:
                 cur_heuristic_dist = self.heuristic_cost(result, self.final_pos)
                 move_heuristic_dist = self.heuristic_cost(move, self.final_pos)
-                if move_heuristic_dist <= cur_heuristic_dist:
+                if move_heuristic_dist < cur_heuristic_dist:
                     result = move
-        print(result)
         return result
                   
     def move_player(self):
         best_move = self.get_best_possible_move()
         if best_move:
+            self.moves.append(self.player.position)
             self.player.move_to_position(best_move)
             self.used_positions.append(best_move)
-            self.moves.append(best_move)
             return True
         else:
             if len(self.moves) > 0:
                 prev_pos = self.moves.pop()
                 self.player.move_to_position(prev_pos)
+
                 return True
         return False
 
