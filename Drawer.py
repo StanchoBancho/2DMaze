@@ -38,29 +38,26 @@ class Drawer:
                 square_rect = ( j * s + self.X_OFFSET,  i * s + self.Y_OFFSET, s, s)
                 if world_map[i][j] == 1:
                     pygame.draw.rect(self.screen, (0, 0, 0), square_rect)
-                elif world_map[i][j] == 2:
-                    pass
-                    #self.player_one.update(pygame.time.get_ticks())
-                    #self.screen.blit(self.player_one.image, square_rect)
-                    #pygame.draw.rect(self.screen, (255, 0, 0), square_rect)
-                elif world_map[i][j] == 3:
-                    pygame.draw.rect(self.screen, (0, 255, 0), square_rect)
+                
         for player in world.players:
             self.draw_player(player)
-            
-        tr_pos = world.treasure.position
+        self.draw_treasure(world.treasure)
+        
+    def draw_treasure(self, treasure):
+        tr_pos = treasure.position
+        s = self.SQUARE_SIZE
         treasure_rect = (tr_pos[1]*s + self.X_OFFSET, tr_pos[0]*s + self.Y_OFFSET, s, s)
         treasure_surface = Drawer.load_image("chest_gold.png")[0]
-        self.screen.blit(treasure_surface, treasure_rect)
-
+        self.screen.blit(treasure_surface, treasure_rect)        
         
     def draw_player(self, player):
         sprite = self.players[player.name]
         if player.prev_position[0] + Player.LEFT[0] == player.position[0] and player.prev_position[1] + Player.LEFT[1] == player.position[1]:
             sprite.is_direction_left = True
         if player.prev_position[0] + Player.RIGHT[0] == player.position[0] and player.prev_position[1] + Player.RIGHT[1] == player.position[1]:
-            sprite.is_direction_left = False 
-        sprite.update(pygame.time.get_ticks(), True)
+            sprite.is_direction_left = False
+        sprite.is_moving = player.is_moving
+        sprite.update(pygame.time.get_ticks())
         s = self.SQUARE_SIZE
         square_rect = (player.position[1] * s + self.X_OFFSET, player.position[0] * s + self.Y_OFFSET, s, s)
         self.screen.blit(sprite.image, square_rect)

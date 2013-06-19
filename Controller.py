@@ -47,27 +47,38 @@ class Controller:
         if self.game_state == self.GAME_MENU_SCREEN:
             pass 
         if self.game_state == self.PLAYING_GAME:
+            self.player_one.is_moving = False
             #move the player one
             if keys[K_LEFT]:
                 self.player_one.move(Player.LEFT)
+                self.player_one.is_moving = True
             if keys[K_RIGHT]:
                 self.player_one.move(Player.RIGHT)
+                self.player_one.is_moving = True
             if keys[K_UP]:
                 self.player_one.move(Player.DOWN)
+                self.player_one.is_moving = True
             if keys[K_DOWN]:
                 self.player_one.move(Player.UP)
+                self.player_one.is_moving = True
             #move the second player
             if self.game_mode == self.GAME_MODE_TWO_PLAYERS:
+                self.player_two.is_moving = False
                 if keys[K_a]:
                     self.player_two.move(Player.LEFT)
+                    self.player_two.is_moving = True
                 if keys[K_d]:
                     self.player_two.move(Player.RIGHT)
+                    self.player_two.is_moving = True
                 if keys[K_w]:
                     self.player_two.move(Player.DOWN)
+                    self.player_two.is_moving = True
                 if keys[K_s]:
                      self.player_two.move(Player.UP)
+                     self.player_two.is_moving = True
             #move the computer
             if self.game_mode == self.GAME_MODE_PLAYER_VS_COMPUTER:
+                self.player_two.is_moving = True
                 self.player_controller.move_player()
         return False
 #Check (and change the game state if needed)

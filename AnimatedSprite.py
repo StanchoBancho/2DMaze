@@ -17,19 +17,19 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self._frame = 0
 
         # Call update to set our first image.
-        self.update(pygame.time.get_ticks(), True)
+        self.update(pygame.time.get_ticks())
 
-    def update(self, t, is_moving):
+    def update(self, t):
         # Note that this doesn't work if it's been more that self._delay
         # time between calls to update(); we only update the image once
         # then, but it really should be updated twice.
 
         if t - self._last_update > self._delay:
-            if not is_moving:
+            if not self.is_moving:
                 if self.is_direction_left:
                     self.image = self.left_images[0]
                 else:
-                    self.image = self.left_images[0]
+                    self.image = self.right_images[0]
             else:                   
                 self._frame += 1
                 if self._frame >= len(self.left_images): self._frame = 0

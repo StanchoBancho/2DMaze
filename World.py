@@ -139,6 +139,7 @@ class Player:
         self.world = world
         self.prev_position = position
         self.position = position
+        self.is_moving = False
         self.name = name
         self.pid = 0
 
