@@ -50,6 +50,3 @@ class AIPlayerController:
 
                 return True
         return False
-
-            
-            

@@ -97,7 +97,7 @@ class Controller:
         
 
     def init_new_world(self):
-        world_height = int(self.resolution[0] / Drawer.SQUARE_SIZE) - 1 
+        world_height = int(self.resolution[0] / Drawer.SQUARE_SIZE) - 1
         world_width = int(self.resolution[1] / Drawer.SQUARE_SIZE) - 1
         self.world = World((world_width, world_height))
         
@@ -106,9 +106,11 @@ class Controller:
         self.player_one = Player(self.world, (0, 1), "Stancho")
         self.world.add_player(self.player_one)
         self.player_two = None
+        self.drawer.init_players_sprite(self.world.players)
         tresure_coords = (self.world.width - 1, int(self.world.height/2))
         self.world.add_treasure(Treasure(self.world, tresure_coords))
         self.game_mode = self.GAME_MODE_TRAINING
+    
 
     def init_multy_player_game(self):
         self.init_new_world()
@@ -117,8 +119,11 @@ class Controller:
         player_two_coords = (0, self.world.height - 2)
         self.player_two = Player(self.world, player_two_coords, "Dobby")
         self.world.add_player(self.player_two)
+        self.drawer.init_players_sprite(self.world.players)
+
         tresure_coords = (self.world.width - 1, int(self.world.height/2))
 #        tresure_coords = (1, 2)
+
         self.world.add_treasure(Treasure(self.world, tresure_coords))
         self.game_mode = self.GAME_MODE_TWO_PLAYERS
 
@@ -134,7 +139,9 @@ class Controller:
         self.player_two = Player(self.world, (0, self.world.height - 2), "PC")
         self.world.add_player(self.player_two)
         self.player_controller = AIPlayerController(self.world, self.player_two, tresure_coords)
-    
+
+        self.drawer.init_players_sprite(self.world.players)
+
         self.game_mode = self.GAME_MODE_PLAYER_VS_COMPUTER
 
 #-check game status and show game over screen if needed

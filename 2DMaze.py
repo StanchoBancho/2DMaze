@@ -37,4 +37,4 @@ class Game:
             clock.tick(20)
 
 if __name__ == '__main__':
-    Game((800, 600)).main()
+    Game((1280, 800)).main()

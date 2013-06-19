@@ -44,13 +44,7 @@ class World:
         return is_position_free
 
     def move_player_to_position(self, player, position):
-        is_position_in_maze_widht = position[0] > 0 and position[0] < self.maze.size[0]
-        is_position_in_maze_height = position[1] > 0 and position[1] < self.maze.size[1] 
-        if not (is_position_in_maze_widht and is_position_in_maze_height):
-            return False
-        position_value = self.maze.board[position[0]][position[1]]
-        is_position_free = position_value == 0
-
+        is_position_free = self.is_position_free(position)
         if is_position_free:
             self.maze.board[player.position[0]][player.position[1]] = 0
             self.maze.board[position[0]][position[1]] = player.pid
@@ -143,16 +137,21 @@ class Player:
     
     def __init__(self, world, position, name):
         self.world = world
+        self.prev_position = position
         self.position = position
         self.name = name
         self.pid = 0
 
     def move(self, direction):
+        next_prev_pos = self.position
         new_position = (self.position[0] + direction[0], self.position[1] + direction[1])
-        self.world.move_player_to_position(self, new_position)
+        if self.world.move_player_to_position(self, new_position):
+            self.prev_position = next_prev_pos
 
     def move_to_position(self, new_position):
-        self.world.move_player_to_position(self, new_position)
+        next_prev_pos = self.position
+        if self.world.move_player_to_position(self, new_position):
+            self.prev_position = next_prev_pos            
         
 class Treasure:
     def __init__(self, world, position):
