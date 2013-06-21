@@ -68,8 +68,16 @@ class Drawer:
         background_surface = Drawer.load_image("maze_background.png")[0]
         scaled_surface = pygame.transform.scale(background_surface, r)
         self.screen.blit(scaled_surface, (0, 0))
-        menu_frame = (game_menu.origin[0], game_menu.origin[1], 256, 256)
+        m_size = game_menu.MENU_SIZE
+        menu_frame = (game_menu.origin[0], game_menu.origin[1], m_size, m_size)
         pygame.draw.rect(self.screen, (232, 232, 232), menu_frame)
+
+        game_name_font = pygame.font.SysFont("monospace", 44)
+        game_name_label = game_name_font.render("Pathfinder", 1, (0,0,0))
+        game_name_title_origin = (game_menu.origin[0] + 60, game_menu.origin[1])
+        self.screen.blit(game_name_label, game_name_title_origin)
+
+
         for b in game_menu.all_buttons:
             b.draw(self.screen)
         
