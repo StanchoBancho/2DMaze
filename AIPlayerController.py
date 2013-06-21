@@ -1,4 +1,5 @@
 from World import *
+from collections import deque
 
 class AIPlayerController:
 
@@ -8,9 +9,38 @@ class AIPlayerController:
         self.final_pos = final_pos
         self.moves = []
         self.used_positions = []
-                
-    def heuristic_cost(self, start, goal):
-        result = abs(start[0] - goal[0]) + abs(start[1] - goal[1])
+        self.known_good_positions = {}
+        self.create_heuristic_static_points()
+
+    def create_heuristic_static_points(self):
+        current_heuristic = -200
+        queue = deque([self.final_pos])
+        self.known_good_positions[self.final_pos] = current_heuristic
+        used = [self.final_pos]
+        while len(queue) > 0 and current_heuristic < 0:
+            t = queue.pop()
+            self.known_good_positions[t] = current_heuristic
+            neighbours = self.get_possible_moves_for_position(t)
+            for n in neighbours:
+                if not n in used:
+                    queue.append(n)
+                    used.append(n)
+            current_heuristic = current_heuristic + 1
+    
+    def heuristic_cost(self, start):
+        if start in self.known_good_positions:
+            return self.known_good_positions[start]
+        result = abs(start[0] - self.final_pos[0]) + abs(start[1] - self.final_pos[1])
+        return result
+
+    def get_possible_moves_for_position(self, position):
+        result = []
+        pos = position
+        for d in Player.POSIBLE_DIRECTIONS: 
+            new_pos = (d[0]+pos[0], d[1]+pos[1])
+            is_new_pos_free = self.world.is_position_free(new_pos)
+            if is_new_pos_free:
+                result.append(new_pos)
         return result
     
     def get_possible_moves(self):
@@ -30,8 +60,8 @@ class AIPlayerController:
             if not result:
                 result = move
             else:
-                cur_heuristic_dist = self.heuristic_cost(result, self.final_pos)
-                move_heuristic_dist = self.heuristic_cost(move, self.final_pos)
+                cur_heuristic_dist = self.heuristic_cost(result)
+                move_heuristic_dist = self.heuristic_cost(move)
                 if move_heuristic_dist < cur_heuristic_dist:
                     result = move
         return result
