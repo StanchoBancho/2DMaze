@@ -125,16 +125,13 @@ class Controller:
 
     def init_multy_player_game(self):
         self.init_new_world()
-        self.player_one = Player(self.world, (0, 1), "Stancho")
+        self.player_one = Player(self.world, (0, 1), "Player 1")
         self.world.add_player(self.player_one)
         player_two_coords = (0, self.world.height - 2)
-        self.player_two = Player(self.world, player_two_coords, "Dobby")
+        self.player_two = Player(self.world, player_two_coords, "Player 2")
         self.world.add_player(self.player_two)
         self.drawer.init_players_sprite(self.world.players)
-
         tresure_coords = (self.world.width - 1, int(self.world.height/2))
-#        tresure_coords = (1, 2)
-
         self.world.add_treasure(Treasure(self.world, tresure_coords))
         self.game_mode = self.GAME_MODE_TWO_PLAYERS
 
@@ -144,10 +141,10 @@ class Controller:
         tresure_coords = (self.world.width - 2, int(self.world.height / 2))
         self.world.add_treasure(Treasure(self.world, tresure_coords))
 
-        self.player_one = Player(self.world, (0, 1), "Stancho")
+        self.player_one = Player(self.world, (0, 1), "Player 1")
         self.world.add_player(self.player_one)
 
-        self.player_two = Player(self.world, (0, self.world.height - 2), "Diablo")
+        self.player_two = Player(self.world, (0, self.world.height - 2), "Player 2")
         self.world.add_player(self.player_two)
         game_difficult = self.menu.game_mode
         self.player_controller = AIPlayerController(self.world, self.player_two, tresure_coords, game_difficult)

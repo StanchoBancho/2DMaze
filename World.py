@@ -142,15 +142,22 @@ class Player:
         self.is_moving = False
         self.name = name
         self.pid = 0
+        self.direction = Player.DOWN
 
     def move(self, direction):
         next_prev_pos = self.position
+        self.direction = direction
         new_position = (self.position[0] + direction[0], self.position[1] + direction[1])
         if self.world.move_player_to_position(self, new_position):
             self.prev_position = next_prev_pos
 
     def move_to_position(self, new_position):
         next_prev_pos = self.position
+        for direction in self.POSIBLE_DIRECTIONS:
+            x_cond = self.position[0] + direction[0] == new_position[0]
+            y_cond = self.position[1] + direction[1] == new_position[1]
+            if x_cond and y_cond:
+                self.direction = direction              
         if self.world.move_player_to_position(self, new_position):
             self.prev_position = next_prev_pos            
         

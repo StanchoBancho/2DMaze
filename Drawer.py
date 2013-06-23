@@ -52,9 +52,9 @@ class Drawer:
         
     def draw_player(self, player):
         sprite = self.players[player.name]
-        if player.prev_position[0] + Player.LEFT[0] == player.position[0] and player.prev_position[1] + Player.LEFT[1] == player.position[1]:
+        if player.direction == Player.LEFT:
             sprite.is_direction_left = True
-        if player.prev_position[0] + Player.RIGHT[0] == player.position[0] and player.prev_position[1] + Player.RIGHT[1] == player.position[1]:
+        if player.direction == Player.RIGHT:
             sprite.is_direction_left = False
         sprite.is_moving = player.is_moving
         sprite.update(pygame.time.get_ticks())
