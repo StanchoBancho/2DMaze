@@ -1,19 +1,26 @@
 from World import *
 from collections import deque
+from GameMenu import *
 
 class AIPlayerController:
 
-    def __init__(self, world, player, final_pos):
+    def __init__(self, world, player, final_pos, game_mode):
         self.world = world
         self.player = player
         self.final_pos = final_pos
         self.moves = []
         self.used_positions = []
         self.known_good_positions = {}
-        self.create_heuristic_static_points()
+        self.create_heuristic_static_points(game_mode)
 
-    def create_heuristic_static_points(self):
-        current_heuristic = -200
+    def create_heuristic_static_points(self, game_mode):
+        if game_mode == GameMenu.AI_INFERNO:
+            current_heuristic = -200
+        if game_mode == GameMenu.AI_NIGHTMARE:
+            current_heuristic = -100
+        if game_mode == GameMenu.AI_NORMAL:
+            current_heuristic = -10
+
         queue = deque([self.final_pos])
         self.known_good_positions[self.final_pos] = current_heuristic
         used = [self.final_pos]

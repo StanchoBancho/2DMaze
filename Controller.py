@@ -103,7 +103,7 @@ class Controller:
             self.menu.state = GameMenu.NO_MODE_CHOSED
         elif self.menu.state == GameMenu.PLAYER_VS_MAC:
             self.game_state = self.PLAYING_GAME
-            self.init_player_vs_mac_game()
+            self.init_player_vs_ai_game()
             self.menu.state = GameMenu.NO_MODE_CHOSED
         
 
@@ -138,7 +138,7 @@ class Controller:
         self.world.add_treasure(Treasure(self.world, tresure_coords))
         self.game_mode = self.GAME_MODE_TWO_PLAYERS
 
-    def init_player_vs_mac_game(self):
+    def init_player_vs_ai_game(self):
         self.init_new_world()
 
         tresure_coords = (self.world.width - 2, int(self.world.height / 2))
@@ -147,9 +147,10 @@ class Controller:
         self.player_one = Player(self.world, (0, 1), "Stancho")
         self.world.add_player(self.player_one)
 
-        self.player_two = Player(self.world, (0, self.world.height - 2), "PC")
+        self.player_two = Player(self.world, (0, self.world.height - 2), "Diablo")
         self.world.add_player(self.player_two)
-        self.player_controller = AIPlayerController(self.world, self.player_two, tresure_coords)
+        game_difficult = self.menu.game_mode
+        self.player_controller = AIPlayerController(self.world, self.player_two, tresure_coords, game_difficult)
 
         self.drawer.init_players_sprite(self.world.players)
 
