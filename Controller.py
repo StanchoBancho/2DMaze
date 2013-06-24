@@ -6,6 +6,7 @@ from GameMenu import *
 from World import *
 from GameOverMenu import *
 from AIPlayerController import AIPlayerController
+from SoundPlayer import SoundPlayer
 
 class Controller:
     GAME_MENU_SCREEN = 0
@@ -25,7 +26,8 @@ class Controller:
         self.game_mode = self.GAME_MODE_NONE
         self.menu = GameMenu(self.screen, resolution)
         self.drawer = Drawer(screen = self.screen)
-    
+        self.sound_player = SoundPlayer()
+        
     def handle_events(self):
         if self.game_state == self.SHOULD_QUIT:
             print("User pressed quit.")
@@ -105,6 +107,12 @@ class Controller:
             self.game_state = self.PLAYING_GAME
             self.init_player_vs_ai_game()
             self.menu.state = GameMenu.NO_MODE_CHOSED
+        if self.menu.should_play_sound:
+            if not self.sound_player.is_playing:
+                self.sound_player.play_theme_music()
+        else:
+            if self.sound_player.is_playing:
+               self.sound_player.stop_playing_music()                
         
 
     def init_new_world(self):
