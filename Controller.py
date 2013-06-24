@@ -113,7 +113,8 @@ class Controller:
         else:
             if self.sound_player.is_playing:
                self.sound_player.stop_playing_music()                
-        
+        if self.menu.should_quit:
+            self.game_state = self.SHOULD_QUIT
 
     def init_new_world(self):
         world_height = int(self.resolution[0] / Drawer.SQUARE_SIZE) - 1
@@ -167,6 +168,7 @@ class Controller:
         if is_treasure_reached:
             self.game_state = self.GAME_OVER_SCREEN                       
             self.init_game_over_screen()
+            self.sound_player.play_end_of_game()
             
     def init_game_over_screen(self):
         winner_name = self.world.winner.name

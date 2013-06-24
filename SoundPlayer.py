@@ -12,6 +12,7 @@ class SoundPlayer:
 
     def play_theme_music(self):
         self.is_playing = True
+        pygame.mixer.music.stop()
         pygame.mixer.music.load('sound/Contra - Stage 2.wav')
         pygame.mixer.music.play(-1)
 

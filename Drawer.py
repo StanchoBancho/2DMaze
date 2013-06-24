@@ -67,7 +67,7 @@ class Drawer:
     
     def draw_game_menu(self, game_menu):
         r = game_menu.resolution
-        background_surface = Drawer.load_image("maze_background.png")[0]
+        background_surface = Drawer.load_image("background.png")[0]
         scaled_surface = pygame.transform.scale(background_surface, r)
         self.screen.blit(scaled_surface, (0, 0))
         m_size = game_menu.MENU_SIZE
