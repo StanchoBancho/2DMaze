@@ -18,7 +18,7 @@ class World:
     def add_player(self, player):
         self.players.append(player)
         self.maze.board[player.position[0]][player.position[1]] = 1 + len(self.players)
-        player.pid = 1 + len(self.players)
+        player.pid = len(self.players)
 
     def add_treasure(self, treasure):
         self.treasure = treasure

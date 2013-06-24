@@ -34,7 +34,7 @@ class Game:
             
             pygame.display.flip()
             # Limit to 20 frames per second
-            clock.tick(20)
+            clock.tick(15)
 
 if __name__ == '__main__':
     Game((1280, 800)).main()

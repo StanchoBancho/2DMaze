@@ -22,10 +22,12 @@ class Drawer:
 
     def init_players_sprite(self, players):
         for player in players:
-            player_one_images_right = self.load_sliced_sprites(20, 20, "player_one_sprite_right.png")
-            player_one_images_left = self.load_sliced_sprites(20, 20, "player_one_sprite_left.png")
-            player_sprite = AnimatedSprite(player_one_images_left, player_one_images_right) 
-            player_sprite.is_direction_left = 1
+            right_images_file = "player_{}_sprite_right.png".format(player.pid)
+            right_images = self.load_sliced_sprites(20, 20, right_images_file)
+            left_images_file = "player_{}_sprite_left.png".format(player.pid)
+            left_images = self.load_sliced_sprites(20, 20, left_images_file)
+            player_sprite = AnimatedSprite(left_images, right_images) 
+            player_sprite.is_direction_left = True
             self.players[player.name] = player_sprite
         
     def draw_maze(self, world):
