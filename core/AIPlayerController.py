@@ -1,6 +1,7 @@
-from core.WorldObjects import *
 from collections import deque
-from GameMenu import *
+
+from core.WorldObjects import *
+from core.GameMenu import *
 
 class AIPlayerController:
 

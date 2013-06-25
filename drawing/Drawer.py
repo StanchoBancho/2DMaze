@@ -2,7 +2,7 @@ import pygame
 import os, sys
 
 from core.WorldObjects import *
-import GameMenu
+from drawing.GameMenuViewController import *
 import GameOverMenu
 import drawing.pygbutton
 

@@ -1,11 +1,8 @@
 import pygame
-from Controller import *
+from core.Controller import *
 
 class Game:
     running = True
-    should_show_menu = True
-    player_one = None
-    player_two = None
     
     def __init__(self, resolution):
         pygame.init()

@@ -1,19 +1,10 @@
-import pygame
 from drawing.pygbutton import PygButton
+import pygame
 
-class GameMenu:
-    NO_MODE_CHOSED = 0
-    SINGLE_PLAYER = 1
-    MULTY_PLAYER = 2
-    PLAYER_VS_MAC = 3
+from core.GameMenu import *
 
-    PLAY_MUSIC = 0
-    DO_NOT_PLAY_MUSIC = 1
+class GameMenuViewController:
 
-    AI_NORMAL = 0
-    AI_NIGHTMARE = 1
-    AI_INFERNO = 2
-    
     MENU_SIZE = 384      
     BUTTON_SIZE = (276, 32)
     MODE_BUTTON_SIZE = (90, 32)
@@ -23,13 +14,8 @@ class GameMenu:
         self.resolution = resolution
         self.origin = ((resolution[0] - self.MENU_SIZE) / 2, (resolution[1] - self.MENU_SIZE) / 2)
         self.init_buttons(resolution)
+        self.game_menu = GameMenu()
         
-        self.state = GameMenu.NO_MODE_CHOSED
-        self.should_quit = False
-        self.game_mode = GameMenu.AI_NORMAL
-        self.should_play_sound = True
-        self.chosed_mode_button = self.normal
-                  
     def init_buttons(self, resolution):
         self.all_buttons = []
 
@@ -57,6 +43,7 @@ class GameMenu:
         normal_button_frame = (button_origin, self.origin[1] + 220, b_width, b_height)
         self.normal = PygButton(normal_button_frame, 'Normal')
         self.normal.bgcolor = (128, 128, 128)  
+        self.chosed_mode_button = self.normal
         self.all_buttons.append(self.normal)
         
         nightmare_button_frame = (button_origin + 92, self.origin[1] + 220, b_width, b_height)
@@ -85,37 +72,35 @@ class GameMenu:
         
     def handle_event(self, event):
         if 'click' in self.single_player.handleEvent(event):
-            self.state = GameMenu.SINGLE_PLAYER
+            self.game_menu.state = GameMenu.SINGLE_PLAYER
         if 'click' in self.multy_player.handleEvent(event):
-            self.state = GameMenu.MULTY_PLAYER
+            self.game_menu.state = GameMenu.MULTY_PLAYER
         if 'click' in self.player_vs_ai.handleEvent(event):
-            self.state = GameMenu.PLAYER_VS_MAC 
+            self.game_menu.state = GameMenu.PLAYER_VS_MAC 
         if 'click' in self.quit.handleEvent(event):
-            self.should_quit = True
+            self.game_menu.should_quit = True
         #handle game difficulty
         if 'click' in self.normal.handleEvent(event):
-            self.game_mode = GameMenu.AI_NORMAL
+            self.game_menu.game_mode = GameMenu.AI_NORMAL
             self.chosed_mode_button.bgcolor = (212, 208, 200)
             self.normal.bgcolor = (128, 128, 128)            
             self.chosed_mode_button = self.normal            
         if 'click' in self.nightmare.handleEvent(event):
-            self.game_mode = GameMenu.AI_NIGHTMARE
+            self.game_menu.game_mode = GameMenu.AI_NIGHTMARE
             self.chosed_mode_button.bgcolor = (212, 208, 200)
             self.nightmare.bgcolor = (128, 128, 128)            
             self.chosed_mode_button = self.nightmare 
         if 'click' in self.inferno.handleEvent(event):
-            self.game_mode = GameMenu.AI_INFERNO
+            self.game_menu.game_mode = GameMenu.AI_INFERNO
             self.chosed_mode_button.bgcolor = (212, 208, 200)
             self.inferno.bgcolor = (128, 128, 128)            
             self.chosed_mode_button = self.inferno 
         #handle sound
         if 'click' in self.sound.handleEvent(event):
-            self.should_play_sound = not self.should_play_sound 
-            if self.should_play_sound:
+            self.game_menu.should_play_sound = not self.game_menu.should_play_sound 
+            if self.game_menu.should_play_sound:
                 self.sound.bgcolor = (212, 208, 200)
                 self.sound.caption = 'Sound'
             else:
                 self.sound.bgcolor = (128, 128, 128)
                 self.sound.caption = 'No Sound'
-
-
