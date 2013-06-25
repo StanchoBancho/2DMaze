@@ -1,5 +1,5 @@
 import pygame
-from pygbutton import PygButton
+from drawing.pygbutton import PygButton
 
 class GameMenu:
     NO_MODE_CHOSED = 0
@@ -22,7 +22,17 @@ class GameMenu:
         self.screen = screen
         self.resolution = resolution
         self.origin = ((resolution[0] - self.MENU_SIZE) / 2, (resolution[1] - self.MENU_SIZE) / 2)
+        self.init_buttons(resolution)
+        
+        self.state = GameMenu.NO_MODE_CHOSED
+        self.should_quit = False
+        self.game_mode = GameMenu.AI_NORMAL
+        self.should_play_sound = True
+        self.chosed_mode_button = self.normal
+                  
+    def init_buttons(self, resolution):
         self.all_buttons = []
+
         #main game option buttons
         button_origin = self.origin[0] + (self.MENU_SIZE - self.BUTTON_SIZE[0])/2
         b_width = self.BUTTON_SIZE[0]
@@ -39,12 +49,14 @@ class GameMenu:
         p_v_a_i_button_frame = (button_origin, self.origin[1] + 180, b_width, b_height)
         self.player_vs_ai = PygButton(p_v_a_i_button_frame, 'Player vs AI')
         self.all_buttons.append(self.player_vs_ai)
+
         #AI difficulty buttons
         b_width = self.MODE_BUTTON_SIZE[0]
         b_height = self.MODE_BUTTON_SIZE[1]
         
         normal_button_frame = (button_origin, self.origin[1] + 220, b_width, b_height)
         self.normal = PygButton(normal_button_frame, 'Normal')
+        self.normal.bgcolor = (128, 128, 128)  
         self.all_buttons.append(self.normal)
         
         nightmare_button_frame = (button_origin + 92, self.origin[1] + 220, b_width, b_height)
@@ -55,16 +67,14 @@ class GameMenu:
         self.inferno = PygButton(inferno_button_frame, 'Inferno')
         self.all_buttons.append(self.inferno)
         #Sound and Help buttons
-        
         b_width = (self.BUTTON_SIZE[0] - 2)/2
         b_height = (self.BUTTON_SIZE[1] - 2)
         sound_button_frame = (button_origin, self.origin[1] + 280, b_width, b_height)
         self.sound = PygButton(sound_button_frame, 'Sound')
         self.all_buttons.append(self.sound)
-
-        help_button_frame = (button_origin + b_width + 2 , self.origin[1] + 280, b_width, b_height)
-        self.help = PygButton(help_button_frame, 'Help')
-        self.all_buttons.append(self.help)
+#        help_button_frame = (button_origin + b_width + 2 , self.origin[1] + 280, b_width, b_height)
+#        self.help = PygButton(help_button_frame, 'Help')
+#        self.all_buttons.append(self.help)
 
         #Quit button
         b_width = self.BUTTON_SIZE[0]
@@ -73,13 +83,6 @@ class GameMenu:
         self.quit = PygButton(quit_button_frame, 'Quit')
         self.all_buttons.append(self.quit)
         
-        self.state = GameMenu.NO_MODE_CHOSED
-        self.should_quit = False
-        self.game_mode = GameMenu.AI_NORMAL
-        self.should_play_sound = True
-        self.chosed_mode_button = self.normal
-        self.normal.bgcolor = (128, 128, 128)            
-
     def handle_event(self, event):
         if 'click' in self.single_player.handleEvent(event):
             self.state = GameMenu.SINGLE_PLAYER

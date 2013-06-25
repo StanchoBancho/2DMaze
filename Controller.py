@@ -1,11 +1,11 @@
 import pygame
 from pygame.locals import *
 
-from Drawer import *
+from drawing.Drawer import Drawer
 from GameMenu import *
-from World import *
+from core.WorldObjects import *
 from GameOverMenu import *
-from AIPlayerController import AIPlayerController
+from core.AIPlayerController import AIPlayerController
 from SoundPlayer import SoundPlayer
 
 class Controller:
@@ -187,7 +187,7 @@ class Controller:
         if self.game_state == self.GAME_MENU_SCREEN:
             self.drawer.draw_game_menu(self.menu)
         elif self.game_state == self.PLAYING_GAME:
-            self.drawer.draw_maze(self.world)
+            self.drawer.draw_world(self.world)
         elif self.game_state == self.GAME_OVER_SCREEN:
             self.drawer.draw_game_over_menu(self.game_over_menu)
            

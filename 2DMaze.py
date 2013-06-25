@@ -33,7 +33,7 @@ class Game:
             self.controller.draw()
             
             pygame.display.flip()
-            # Limit to 20 frames per second
+            # Limit to 15 frames per second
             clock.tick(15)
 
 if __name__ == '__main__':
