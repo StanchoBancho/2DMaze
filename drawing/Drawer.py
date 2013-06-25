@@ -3,7 +3,6 @@ import os, sys
 
 from core.WorldObjects import *
 from drawing.GameMenuViewController import *
-import GameOverMenu
 import drawing.pygbutton
 
 from drawing.AnimatedSprite import AnimatedSprite
@@ -102,7 +101,7 @@ class Drawer:
         detail_title_origin = (game_over_menu.origin[0] + 2, game_over_menu.origin[1] + 50)
         self.screen.blit(detail_label_one, detail_title_origin)
 
-        detail_text_two = "{0} you win!".format(game_over_menu.winner_name)
+        detail_text_two = "{0} you win!".format(game_over_menu.game_over_menu.winner_name)
         detail_label_two = detail_font.render(detail_text_two, 1, (0,0,0))
         detail_title_two_origin = (game_over_menu.origin[0] + 2, game_over_menu.origin[1] + 80)
         self.screen.blit(detail_label_two, detail_title_two_origin)

@@ -3,10 +3,10 @@ from pygame.locals import *
 
 from drawing.Drawer import Drawer
 from drawing.GameMenuViewController import *
+from drawing.GameOverMenuViewController import *
 from core.WorldObjects import *
 from core.AIPlayerController import AIPlayerController
-from GameOverMenu import *
-from SoundPlayer import SoundPlayer
+from sound.SoundPlayer import SoundPlayer
 
 class Controller:
     GAME_MENU_SCREEN = 0
@@ -42,7 +42,7 @@ class Controller:
             if self.game_state == self.GAME_MENU_SCREEN:                                        
                 self.main_menu_vc.handle_event(event)
             if self.game_state == self.GAME_OVER_SCREEN:
-                self.game_over_menu.handle_event(event)
+                self.game_over_menu_vc.handle_event(event)
             if event.type == KEYDOWN:
                 if pygame.key.get_pressed()[K_RETURN]:
                     pass                   
@@ -173,7 +173,8 @@ class Controller:
             
     def init_game_over_screen(self):
         winner_name = self.world.winner.name
-        self.game_over_menu = GameOverMenu(self.resolution, winner_name)
+        self.game_over_menu_vc = GameOverMenuViewController(self.resolution, winner_name)
+        self.game_over_menu = self.game_over_menu_vc.game_over_menu
 
 #-check game over menu status and start new game of quit
     def check_geme_over_menu_state(self):
@@ -190,6 +191,6 @@ class Controller:
         elif self.game_state == self.PLAYING_GAME:
             self.drawer.draw_world(self.world)
         elif self.game_state == self.GAME_OVER_SCREEN:
-            self.drawer.draw_game_over_menu(self.game_over_menu)
+            self.drawer.draw_game_over_menu(self.game_over_menu_vc)
            
         
