@@ -1,14 +1,16 @@
 import pygame
 from core.Controller import *
+
+
 class Game:
     running = True
-    
+
     def __init__(self, resolution):
         pygame.init()
         self.resolution = resolution
         self.screen = pygame.display.set_mode(resolution)
         pygame.display.set_caption("2DMaze Game")
-        self.controller = Controller(resolution, self.screen)       
+        self.controller = Controller(resolution, self.screen)
 
     def main(self):
         clock = pygame.time.Clock()
@@ -27,7 +29,7 @@ class Game:
 
             #Draw everything
             self.controller.draw()
-            
+
             pygame.display.flip()
             # Limit to 15 frames per second
             clock.tick(15)

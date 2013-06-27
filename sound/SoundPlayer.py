@@ -1,5 +1,7 @@
 import pygame
-import os, sys
+import os
+import sys
+
 
 class SoundPlayer:
 
@@ -25,4 +27,3 @@ class SoundPlayer:
             fullname = os.path.join('sound', 'Contra - Stage Clear.wav')
             pygame.mixer.music.load(fullname)
             pygame.mixer.music.play(0)
-        

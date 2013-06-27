@@ -10,13 +10,9 @@ class GameMenu:
     AI_NORMAL = 0
     AI_NIGHTMARE = 1
     AI_INFERNO = 2
-    
+
     def __init__(self):
         self.state = GameMenu.NO_MODE_CHOSED
         self.should_quit = False
         self.game_mode = GameMenu.AI_NORMAL
         self.should_play_sound = True
-                  
-
-
-

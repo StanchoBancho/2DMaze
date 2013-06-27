@@ -3,6 +3,7 @@ from collections import deque
 from WorldObjects import *
 from GameMenu import *
 
+
 class AIPlayerController:
 
     def __init__(self, world, player, final_pos, game_mode):
@@ -34,33 +35,35 @@ class AIPlayerController:
                     queue.append(n)
                     used.append(n)
             current_heuristic = current_heuristic + 1
-    
+
     def heuristic_cost(self, start):
         if start in self.known_good_positions:
             return self.known_good_positions[start]
-        result = abs(start[0] - self.final_pos[0]) + abs(start[1] - self.final_pos[1])
+        x_dist = abs(start[0] - self.final_pos[0])
+        y_dist = abs(start[1] - self.final_pos[1])
+        result = x_dist + y_dist
         return result
 
     def get_possible_moves_for_position(self, position):
         result = []
         pos = position
-        for d in Player.POSIBLE_DIRECTIONS: 
+        for d in Player.POSIBLE_DIRECTIONS:
             new_pos = (d[0]+pos[0], d[1]+pos[1])
             is_new_pos_free = self.world.is_position_free(new_pos)
             if is_new_pos_free:
                 result.append(new_pos)
         return result
-    
+
     def get_possible_moves(self):
         result = []
         pos = self.player.position
-        for d in Player.POSIBLE_DIRECTIONS: 
+        for d in Player.POSIBLE_DIRECTIONS:
             new_pos = (d[0]+pos[0], d[1]+pos[1])
             is_new_pos_free = self.world.is_position_free(new_pos)
             if is_new_pos_free and (not new_pos in self.used_positions):
                 result.append(new_pos)
         return result
-                        
+
     def get_best_possible_move(self):
         result = None
         possible_moves = self.get_possible_moves()
@@ -73,7 +76,7 @@ class AIPlayerController:
                 if move_heuristic_dist < cur_heuristic_dist:
                     result = move
         return result
-                  
+
     def move_player(self):
         best_move = self.get_best_possible_move()
         if best_move:
