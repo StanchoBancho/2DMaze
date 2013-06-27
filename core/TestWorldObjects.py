@@ -1,5 +1,5 @@
-from WorldObjects import *
 import unittest
+from WorldObjects import *
 
 class TestWorldObjects(unittest.TestCase):
 

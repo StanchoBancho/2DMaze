@@ -1,6 +1,5 @@
 import pygame
 from core.Controller import *
-
 class Game:
     running = True
     

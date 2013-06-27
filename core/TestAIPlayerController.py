@@ -1,5 +1,5 @@
-from AIPlayerController import *
 import unittest
+from AIPlayerController import *
 
 class TestAIPlayerController(unittest.TestCase):
 
