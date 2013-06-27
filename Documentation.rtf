@@ -1,0 +1,62 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\b\fs28 \cf0 The main idea of the game hierarchy:
+\b0  \
+
+\fs24 \
+The code is separated in 3 main categories:\
+-core\
+-drawing\
+-sound\
+\
+
+\b Core.
+\b0  In the Core we have the Controller in which is the whole game logic, the WorldObjects, GameMenu, and GameOverMenu representing all the models. And the AIPlayerController who is responsible for the Artificial Intelligence of the player opponent. \
+\
+
+\b Drawing.
+\b0  In it we have the Drawer, which is the UI part of the game - it draws all the menus and game scenes. We have the GameMenuController, and GameOverMenuController, which are responsible for the visualisation of the GameMenu and GameOverMenu model objects. And we have the AnimatedSprite class which is responsible for the animation of the players.\
+\
+
+\b Sound.
+\b0  In it we have the SoundPlayer who is responsible for playing the cool sound of the game.\
+\
+
+\b\fs28 The details:\
+\
+
+\fs24 core.Controller
+\b0 \
+In this class we have the following methods:\
+-\ul handle_events\ulnone    - method responsible for handling all kind of events no matter the game status used on every run loop\
+-\ul update_game_status\ulnone  - method responsible for updating the game status used on every run loop. This method uses the next three methods depending on Controllers current game_state\
+\ul -check_menu_state\
+-check_world_state\
+-check_geme_over_menu_state\
+-init_new_world\ulnone  - this method reinitialise the world in the game and it is used when we start new game. Depending on chosen game mode we reinitialise the controller properties with one of the next three methods:   \
+-\ul init_single_player_game\
+-init_multy_player_game\
+-init_player_vs_ai_game\ulnone \
+\ul -check_world_state\ulnone  - with this method we understand did the game over (with finding the treasure).\
+\ul -init_game_over_screen\ulnone  - this method is required to initialise the appropriate game over controller object with the appropriate winner name\
+\ul -check_geme_over_menu_state\ulnone  \
+\ul -draw\ulnone  - this method is called by the main run loop and ask the drawer to draw the current game state.\
+\
+
+\b core.AIPlayerController\
+
+\b0 In this class we have the following methods:\
+\ul -create_heuristic_static_points\ulnone - In this method we create some initial static heuristic points from the final point depending on the chosen game_mode. This method create a list with well known good positions near to the final. So when the AI player comes to one of these point he will be 100 sure that he is on good track. And it will chose this point (the one from well known ones) instead of other suggested by the normal heuristic function.\
+\ul -heuristic_cost\ulnone  - this method return the heuristic cost from the parameter start point  to the finish point. If the parameter point is not in the well known point the function return the manhattan distance ( abs(start.x - finish.x) + abs(start.y - finish.y) ). If the point is in the well known points the function return negative value depending on the distance to the final point and the game_mode. For each game modes we have different count of well known positions: -200 -100, -10 and the depending on them the min value of the heuristic function will be -200, -100 or -10 - the distance from the final point to the final point.  This method is used for choosing the "better" way to go from current position if we have choice where to go.\
+\ul -get_possible_moves_for_position\ulnone  - return all the possible moves for parameter positions depending on the world maze\
+\ul -get_best_possible_move\ulnone  - Return the best possible unused move for current player`s position\
+\ul -move_player\ulnone  - move the player to the next good looking position. If we are in dead end this method return the player to previous positions.\
+\
+
+\b core.WorldObjects
+\b0 \
+}

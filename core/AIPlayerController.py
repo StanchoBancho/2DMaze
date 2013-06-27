@@ -54,20 +54,13 @@ class AIPlayerController:
                 result.append(new_pos)
         return result
 
-    def get_possible_moves(self):
-        result = []
-        pos = self.player.position
-        for d in Player.POSIBLE_DIRECTIONS:
-            new_pos = (d[0]+pos[0], d[1]+pos[1])
-            is_new_pos_free = self.world.is_position_free(new_pos)
-            if is_new_pos_free and (not new_pos in self.used_positions):
-                result.append(new_pos)
-        return result
-
     def get_best_possible_move(self):
         result = None
-        possible_moves = self.get_possible_moves()
+        player_pos = self.player.position
+        possible_moves = self.get_possible_moves_for_position(player_pos)
         for move in possible_moves:
+            if move in self.used_positions:
+                continue
             if not result:
                 result = move
             else:
