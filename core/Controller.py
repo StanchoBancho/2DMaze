@@ -5,7 +5,7 @@ from drawing.Drawer import Drawer
 from drawing.GameMenuViewController import *
 from drawing.GameOverMenuViewController import *
 from core.WorldObjects import *
-from core.AIPlayerController import AIPlayerController
+from core.AIPlayerController import *
 from sound.SoundPlayer import SoundPlayer
 
 class Controller:
@@ -126,7 +126,7 @@ class Controller:
         self.init_new_world()
         self.player_one = Player(self.world, (0, 1), "Stancho")
         self.world.add_player(self.player_one)
-        self.player_two = None
+        self.player_twadd_playero = None
         self.drawer.init_players_sprite(self.world.players)
         tresure_coords = (self.world.width - 1, int(self.world.height/2))
         self.world.add_treasure(Treasure(self.world, tresure_coords))
@@ -184,7 +184,6 @@ class Controller:
             self.game_state = self.SHOULD_QUIT
              
 #Ask the drawer to draw the required part of the game 
-
     def draw(self):
         if self.game_state == self.GAME_MENU_SCREEN:
             self.drawer.draw_game_menu(self.main_menu_vc)
@@ -192,5 +191,3 @@ class Controller:
             self.drawer.draw_world(self.world)
         elif self.game_state == self.GAME_OVER_SCREEN:
             self.drawer.draw_game_over_menu(self.game_over_menu_vc)
-           
-        

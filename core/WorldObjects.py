@@ -1,7 +1,4 @@
-import pygame
 import random
-
-from time import time
 
 class World:
     treasure = None
@@ -17,7 +14,6 @@ class World:
 
     def add_player(self, player):
         self.players.append(player)
-        self.maze.board[player.position[0]][player.position[1]] = 1 + len(self.players)
         player.pid = len(self.players)
 
     def add_treasure(self, treasure):
@@ -35,8 +31,8 @@ class World:
         return False
     
     def is_position_free(self, position):
-        is_position_in_maze_widht = position[0] > 0 and position[0] < self.maze.size[0]
-        is_position_in_maze_height = position[1] > 0 and position[1] < self.maze.size[1] 
+        is_position_in_maze_widht = position[0] >= 0 and position[0] < self.maze.size[0]
+        is_position_in_maze_height = position[1] >= 0 and position[1] < self.maze.size[1] 
         if not (is_position_in_maze_widht and is_position_in_maze_height):
             return False
         position_value = self.maze.board[position[0]][position[1]]
@@ -46,8 +42,6 @@ class World:
     def move_player_to_position(self, player, position):
         is_position_free = self.is_position_free(position)
         if is_position_free:
-            self.maze.board[player.position[0]][player.position[1]] = 0
-            self.maze.board[position[0]][position[1]] = player.pid
             player.position = position
             return True
         return False
@@ -61,8 +55,6 @@ class Maze:
         #-1 - unknown
         #0  - empty
         #1  - black
-        #2  - first player
-        #3  - second player
         self.board = [[0 for j in range(self.height)] for i in range(self.width)]
         self.possible_moves = []
         
