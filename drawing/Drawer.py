@@ -2,10 +2,8 @@ import pygame
 import os, sys
 
 from core.WorldObjects import *
-from drawing.GameMenuViewController import *
-import drawing.pygbutton
-
-from drawing.AnimatedSprite import AnimatedSprite
+from GameMenuViewController import *
+from AnimatedSprite import AnimatedSprite
 
 class Drawer:
     # Define some colors

@@ -4,9 +4,9 @@ from pygame.locals import *
 from drawing.Drawer import Drawer
 from drawing.GameMenuViewController import *
 from drawing.GameOverMenuViewController import *
-from core.WorldObjects import *
-from core.AIPlayerController import *
 from sound.SoundPlayer import SoundPlayer
+from WorldObjects import *
+from AIPlayerController import *
 
 class Controller:
     GAME_MENU_SCREEN = 0

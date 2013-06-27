@@ -1,4 +1,4 @@
-from drawing.pygbutton import PygButton
+from pygbutton import PygButton
 import pygame
 
 from core.GameMenu import *

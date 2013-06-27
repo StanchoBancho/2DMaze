@@ -1,5 +1,5 @@
 import pygame
-from drawing.pygbutton import PygButton
+from pygbutton import PygButton
 from core.GameOverMenu import GameOverMenu
 
 class GameOverMenuViewController:

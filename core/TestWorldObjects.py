@@ -22,8 +22,5 @@ class TestWorldObjects(unittest.TestCase):
                     self.assertEqual(self.player_one.position[0], new_x)
                     self.assertEqual(self.player_one.position[1], new_y)
                     break
-    
-                               
-if __name__ == '__main__':
-    unittest.main()
+
     

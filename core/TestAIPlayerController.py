@@ -25,6 +25,3 @@ class TestAIPlayerController(unittest.TestCase):
                 return
             self.player_controller.move_player()
         self.assertEqual(0, 1)
-
-if __name__ == '__main__':
-    unittest.main()
