@@ -109,8 +109,7 @@ class Maze:
             for j in range(1, self.height, 2):
                 self.board[i][j] = -1
         #make the puzzle
-        self.possible_moves = [(1, 1)]
-        self.board[1][1] = 1
+        self.possible_moves = [(1, 1), (0, self.height - 2)]
         self.board[0][1] = 0
         self.board[0][self.height-2] = 0
         random.seed()
